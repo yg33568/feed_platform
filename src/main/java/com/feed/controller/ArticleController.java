@@ -11,7 +11,7 @@ public class ArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @PostMapping("/publish")
+    @GetMapping("/publish")
     public String publish(@RequestParam Long authorId,@RequestParam String title, @RequestParam String content){
         Long articleId = articleService.publishArticle(authorId, title, content);
         return "文章发布成功，ID: " + articleId;

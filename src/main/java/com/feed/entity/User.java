@@ -17,4 +17,6 @@ public class User {
     private Integer followCount;   // 关注数
     private Integer status;
     private Date createTime;
+    private Integer isBigV;
+    private Date lastLoginTime;  //最后一次登录时间，用于判断是否活跃
 }
