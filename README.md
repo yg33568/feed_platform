@@ -23,9 +23,11 @@
 | JMeter | 压测验证 |
 
 ## 🏗️ 系统架构
+```
 发文章 → MySQL → MQ → 消费者 → 查询粉丝 → 判断活跃度 → 写入 Redis ZSet
 ↓
 粉丝刷首页 ← 批量查文章详情 ← Redis ZSet 分页 ← 推/拉模式切换 ← 判断活跃度
+```
 
 ## 🚀 核心功能
 
@@ -49,6 +51,7 @@
 | `/article/publish` | 474 | 162ms | 写 DB + MQ 确认 |
 
 ## 🔁 消息可靠性设计
+```
 保存文章 + 消息日志(PENDING)
 ↓
 发送 MQ + ConfirmCallback
@@ -56,10 +59,10 @@
 成功 → SUCCESS 失败 → FAILED → 定时重试(最多3次,指数退避)
 ↓
 消费失败 → 死信队列 → 告警
-
-text
+```
 
 ## 📁 项目结构
+```
 com.feed/
 ├── controller/ # 控制层
 ├── service/ # 业务层
@@ -71,8 +74,7 @@ com.feed/
 ├── task/ # 定时任务（大V更新、消息重试）
 ├── common/ # 统一响应 + 全局异常
 └── startup/ # 启动初始化（布隆过滤器、缓存预热）
-
-text
+```
 
 ## 🔧 快速启动
 
@@ -85,20 +87,22 @@ text
 
 ### 2. 启动 RabbitMQ（WSL Ubuntu）
 
-```bash
+```
 wsl -d Ubuntu-24.04
 sudo service rabbitmq-server start
-3. 修改配置
+```
+### 3. 修改配置
+```
 application.yml 中修改数据库、Redis、RabbitMQ 连接信息。
-
-4. 初始化数据库
+```
+### 4. 初始化数据库
 执行 docs/schema.sql 中的建表语句。
 
-5. 运行项目
+### 5. 运行项目
 IDEA 中运行 FeedApplication，访问 http://localhost:8080
 
-6. 接口测试
-bash
+### 6. 接口测试
+```
 # 关注用户
 GET /follow?userId=1&followId=2
 
@@ -107,6 +111,7 @@ GET /article/publish?authorId=2&title=你好&content=测试
 
 # 拉取 Feed 流
 GET /feed?userId=1
+```
 📈 后续优化方向
 用户登录 + JWT 鉴权，主动更新 last_login_time
 
@@ -140,4 +145,4 @@ A：推模式把“写扩散”提前到发文时，用户读时只需从 Redis 
 MIT
 
 🔗 相关链接
-[掘金/CSDN 博客]（https://blog.csdn.net/yg33568）
+[CSDN博客]（https://blog.csdn.net/yg33568）
